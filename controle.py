@@ -111,14 +111,21 @@ class PerdasDB:
         print("Produto editado com sucesso")
 
     #METODO QUE BUSCA A REMESSA DO PRODUTO DE ACORDO COM O NOME DO PRODUTO
+    #Pega todos os valores na tabela, e descompacta em variaveis para uma melhor visualizacao
     def buscar_produto(self, produto):
         query = 'SELECT * FROM remessas WHERE produto LIKE ?'
 
         self.cursor.execute(query, (f"%{produto}%",))
+        produto_tuple = self.cursor.fetchall()
 
-        for produto in self.cursor.fetchall():
-            print(produto)
+        print("\nID - NOME - SETOR - VALIDADE - DIAS \n")
+        print("-" *70)
 
+        for item in produto_tuple:
+            ident, nome, setor, data, dias_restantes, = item
+
+            print(f"\n{ident} - {nome} - {setor} - {data} - {dias_restantes}\n")
+        print("-" *70)
 
     def fechar(self):
         self.cursor.close()
@@ -128,7 +135,7 @@ class PerdasDB:
 """ Caso o Parametro seja (1), a funcao so retornara o {Produto, Setor}, e caso o Parametro seja (0)
     Retornara {Produto, Setor, Dia, Mes, Ano}."""
 def insere_dados(opcao = 0):
-    produto = input('NOME DO PRODUTO: ')
+    produto = input('\nNOME DO PRODUTO: ')
 
     if opcao == 0:
         setor = input('SETOR DO PRODUTO: ')
@@ -165,7 +172,7 @@ if __name__ == "__main__":
                 continue
 
             if decision == 'i':
-                print("\nRegras: \n1° - Nome \n2° - Marca \n")
+                print("\nRegras: \n1° - Nome \n2° - Marca")
                 produto, setor, dia, mes, ano = insere_dados(0)
                 perdas.insere_remessa(produto, setor, dia, mes, ano)
             
@@ -178,7 +185,7 @@ if __name__ == "__main__":
                 perdas.buscar_produto(produto)
 
             elif decision == 'd':
-                ident = input("Id da Remessa: ")
+                ident = input("\nId da Remessa: ")
                 perdas.exclui_remessa(ident)
                         
             elif decision == 'f':
