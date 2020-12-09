@@ -16,3 +16,5 @@ para atualizar a Tabela com os dias restantes para o vencimento do produto.
 ## Tecnlogias Utilizadas
 foi utilizado nesse projeto, a Linguagem de Programação Python, o modelo de Banco de Dados Relacional SQL,
 usei do módulo SQLite para o Gerenciamento do Banco de Dados no código, e o "BD Browser for SQLite" para uma melhor visualização dos dados. 
+
+- O arquivo BancoDeDados.db serviu apenas como um teste!
