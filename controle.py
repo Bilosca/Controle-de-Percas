@@ -23,16 +23,16 @@ class PerdasDB:
     # o nome do produto, o setor, dia de validade, mes e ano.
     def insereRemessa(self, produto, setor, dia, mes, ano):
         try:
-            validade_data = datetime.date(ano, mes, dia)
+            validadeData = datetime.date(ano, mes, dia)
 
             global atual
             atual = datetime.date.today()
 
-            diferenca = abs((validade_data - atual).days)
+            diferenca = abs((validadeData - atual).days)
 
             query = 'INSERT INTO remessas(produto, setor, validade, dias) VALUES (?, ?, ?, ?)'
 
-            self.cursor.execute(query, (produto, setor, validade_data, diferenca))
+            self.cursor.execute(query, (produto, setor, validadeData, diferenca))
             self.conex.commit()
             print("Produto inserido com sucesso")
 
@@ -45,21 +45,21 @@ class PerdasDB:
     def organizaDatas(self, ident):
 
         try:
-            select_data_query = "SELECT validade FROM remessas WHERE id LIKE ?"            
+            selectDataQuery = "SELECT validade FROM remessas WHERE id LIKE ?"            
 
             
-            data = self.cursor.execute(select_data_query, (ident,)).fetchone()
+            data = self.cursor.execute(selectDataQuery, (ident,)).fetchone()
 
             atual = datetime.date.today()
 
             # ja que o fetch pega tuplas, eu converti a tupla em string e fatiei a string em varios ints diferentes
             
-            data_string = data[0]
+            dataString = data[0]
             
 
-            ano = int(data_string[:4])
-            mes = int(data_string[5:7])
-            dia = int(data_string[8:10])
+            ano = int(dataString[:4])
+            mes = int(dataString[5:7])
+            dia = int(dataString[8:10])
 
             data = datetime.date(ano, mes, dia)
             
@@ -73,16 +73,16 @@ class PerdasDB:
     def atualizaDias_e_Notifica(self):
 
         #queries utilizadas nesta funcao
-        select_id_query = "SELECT id, produto FROM remessas"
-        update_dias_query = "UPDATE remessas SET dias = ? WHERE id = ?"
-        delete_query = "DELETE FROM remessas WHERE id = ? "
+        selectIdQuery = "SELECT id, produto FROM remessas"
+        updateDiasQuery = "UPDATE remessas SET dias = ? WHERE id = ?"
+        deleteQuery = "DELETE FROM remessas WHERE id = ? "
 
         try:
-            self.cursor.execute(select_id_query,)
-            coluna_dias = self.cursor.fetchall()
+            self.cursor.execute(selectIdQuery,)
+            colunaDias = self.cursor.fetchall()
 
             # a cada loop "Ident" recebe o ID da remessa
-            for row in coluna_dias:
+            for row in colunaDias:
                 #row[0] = id
                 #row[1] = nome do produto 
                 ident = row[0]
@@ -94,10 +94,10 @@ class PerdasDB:
                 
                 if diferenca <= 0:
                     print(f"Produto Deletado! \nID: {ident} \nProduto: {produto}")
-                    self.cursor3.execute(delete_query, (ident,))
+                    self.cursor3.execute(deleteQuery, (ident,))
 
                 
-                self.cursor2.execute(update_dias_query, (diferenca, ident))
+                self.cursor2.execute(updateDiasQuery, (diferenca, ident))
                 self.conex.commit()
 
         
@@ -126,15 +126,15 @@ class PerdasDB:
         query = 'SELECT * FROM remessas WHERE produto LIKE ?'
 
         self.cursor.execute(query, (f"%{produto}%",))
-        produto_tuple = self.cursor.fetchall()
+        produtoTuple = self.cursor.fetchall()
 
         print("\nID - NOME - SETOR - VALIDADE - DIAS \n")
         print("-" *70)
 
-        for item in produto_tuple:
-            ident, nome, setor, data, dias_restantes, = item
+        for item in produtoTuple:
+            ident, nome, setor, data, diasRestantes, = item
 
-            print(f"\n{ident} - {nome} - {setor} - {data} - {dias_restantes}\n")
+            print(f"\n{ident} - {nome} - {setor} - {data} - {diasRestantes}\n")
         print("-" *70)
 
     def fechar(self):
