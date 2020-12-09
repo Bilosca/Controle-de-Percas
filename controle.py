@@ -8,10 +8,20 @@ class PerdasDB:
         self.cursor2 = self.conex.cursor()
         self.cursor3 = self.conex.cursor()
 
+        criaTabelaQuery = "CREATE TABLE IF NOT EXISTS remessas(\
+        id INTEGER PRIMARY KEY AUTOINCREMENT,\
+        produto TEXT,\
+        setor TEXT,\
+        validade INTEGER,\
+        dias INTEGER)"
+
+        self.cursor.execute(criaTabelaQuery)
+        self.conex.commit()
+
 
     # Metodo para inserir uma remessa no Banco de Dados, recebe:
     # o nome do produto, o setor, dia de validade, mes e ano.
-    def insere_remessa(self, produto, setor, dia, mes, ano):
+    def insereRemessa(self, produto, setor, dia, mes, ano):
         try:
             validade_data = datetime.date(ano, mes, dia)
 
@@ -32,7 +42,7 @@ class PerdasDB:
 
     
     # Metodo para pegar a data de validade e retornar a diferenca de dias para vencimento
-    def organiza_Datas(self, ident):
+    def organizaDatas(self, ident):
 
         try:
             select_data_query = "SELECT validade FROM remessas WHERE id LIKE ?"            
@@ -78,7 +88,7 @@ class PerdasDB:
                 ident = row[0]
                 produto = row[1]
 
-                diferenca = (self.organiza_Datas(ident))
+                diferenca = (self.organizaDatas(ident))
                 if diferenca <= 30:
                     print(f"ID: {ident} \nProduto: {produto} \nDias: { diferenca} \n")
                 
@@ -95,15 +105,15 @@ class PerdasDB:
             print(erro)
 
     # Metodo para Excluir uma remessa do Banco de Dados, recebe como parametro o ID da remessa
-    def exclui_remessa(self, ident):
+    def excluiRemessa(self, ident):
         query = 'DELETE FROM remessas WHERE id = ?'
 
         self.cursor.execute(query,(ident,))
         self.conex.commit()
-        print("Produto deletado com sucesso")
+        print("\nProduto deletado com sucesso")
 
     # Metodo para editar uma remessa do Banco de Dados, recebe como parametros, id, produto e setor
-    def editar_remessa(self, ident, produto, setor, ):
+    def editarRemessa(self, ident, produto, setor, ):
         query = 'UPDATE remessas SET produto = ?, setor = ? WHERE id = ?'
 
         self.cursor.execute(query, (produto, setor, ident))
@@ -112,7 +122,7 @@ class PerdasDB:
 
     #METODO QUE BUSCA A REMESSA DO PRODUTO DE ACORDO COM O NOME DO PRODUTO
     #Pega todos os valores na tabela, e descompacta em variaveis para uma melhor visualizacao
-    def buscar_produto(self, produto):
+    def buscarProduto(self, produto):
         query = 'SELECT * FROM remessas WHERE produto LIKE ?'
 
         self.cursor.execute(query, (f"%{produto}%",))
@@ -134,7 +144,7 @@ class PerdasDB:
 # FUNCAO QUE PEGA OS DADOS DO PRODUTO E RETORNA PARA VARIAVEIS
 """ Caso o Parametro seja (1), a funcao so retornara o {Produto, Setor}, e caso o Parametro seja (0)
     Retornara {Produto, Setor, Dia, Mes, Ano}."""
-def insere_dados(opcao = 0):
+def insereDados(opcao = 0):
     produto = input('\nNOME DO PRODUTO: ')
 
     if opcao == 0:
@@ -154,7 +164,7 @@ def insere_dados(opcao = 0):
 
 
 if __name__ == "__main__":
-    perdas = PerdasDB('/home/gabe/Desktop/treinamento/perdas/controle_perdas.db')
+    perdas = PerdasDB("BancoDeDados.db")
     letras = ['i', 'e', 'b', 'd', 'f']
     perdas.atualizaDias_e_Notifica()
     while True:
@@ -173,20 +183,20 @@ if __name__ == "__main__":
 
             if decision == 'i':
                 print("\nRegras: \n1° - Nome \n2° - Marca")
-                produto, setor, dia, mes, ano = insere_dados(0)
-                perdas.insere_remessa(produto, setor, dia, mes, ano)
+                produto, setor, dia, mes, ano = insereDados(0)
+                perdas.insereRemessa(produto, setor, dia, mes, ano)
             
             elif decision =='e':
-                ident, produto, setor = insere_dados(1)
-                perdas.editar_remessa(ident, produto, setor)
+                ident, produto, setor = insereDados(1)
+                perdas.editarRemessa(ident, produto, setor)
             
             elif decision == 'b':
-                produto = insere_dados(2)
-                perdas.buscar_produto(produto)
+                produto = insereDados(2)
+                perdas.buscarProduto(produto)
 
             elif decision == 'd':
                 ident = input("\nId da Remessa: ")
-                perdas.exclui_remessa(ident)
+                perdas.excluiRemessa(ident)
                         
             elif decision == 'f':
                 perdas.fechar()
