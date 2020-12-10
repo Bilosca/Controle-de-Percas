@@ -1,8 +1,12 @@
 from controle_metodos import PerdasDB, insereDados
+import os
 
 #Arquivo principal cujo o programa importa as classes e metodos e roda
 
-perdas = PerdasDB("controle_perdas.db")
+if not os.path.exists("perdas"):
+    os.mkdir("perdas")
+
+perdas = PerdasDB("perdas/controle_perdas.db")
 letras = ['i', 'e', 'b', 'd', 'f']
 perdas.atualizaDias_e_Notifica()
 while True:
