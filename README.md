@@ -4,7 +4,8 @@ Como eu trabalho com reposição de mercadorias, ocorre de haver percas, então 
 habilidades como programador, praticar, e aprender tecnologias que antes não tinha trabalhado.
 
 ## Como Funciona o projeto
-É um projeto bastante simples. Quando iniciado primeiramente, ele lhe dará as opções de:
+É um projeto bastante simples. Quando iniciado primeiramente criará a pasta "Perda" e dentro dela o arquivo "controle_perdas.db".
+Para o manuseamento do Programa, ele lhe dará as seguintes opções:
 * Inserir Remessa
 * Editar Remessa
 * Buscar Remessa
@@ -17,4 +18,3 @@ para atualizar a Tabela com os dias restantes para o vencimento do produto.
 foi utilizado nesse projeto, a Linguagem de Programação Python, o modelo de Banco de Dados Relacional SQL,
 usei do módulo SQLite para o Gerenciamento do Banco de Dados no código, e o "BD Browser for SQLite" para uma melhor visualização dos dados. 
 
-- O arquivo BancoDeDados.db serviu apenas como um teste!
