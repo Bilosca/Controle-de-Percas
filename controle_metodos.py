@@ -36,7 +36,7 @@ class PerdasDB:
 
             self.cursor.execute(query, (produto, setor, validadeData, diferenca))
             self.conex.commit()
-            print("Produto inserido com sucesso")
+            print("\nProduto inserido com sucesso")
 
         except Exception as error:
             print(error)
@@ -75,7 +75,7 @@ class PerdasDB:
     def atualizaDias_e_Notifica(self):
 
         #queries utilizadas nesta funcao
-        selectIdQuery = "SELECT id, produto FROM remessas"
+        selectIdQuery = "SELECT id, produto, validade FROM remessas"
         updateDiasQuery = "UPDATE remessas SET dias = ? WHERE id = ?"
         deleteQuery = "DELETE FROM remessas WHERE id = ? "
 
@@ -89,15 +89,23 @@ class PerdasDB:
                 #row[1] = nome do produto 
                 ident = row[0]
                 produto = row[1]
+                validade = row[2]
 
                 diferenca = (self.organizaDatas(ident))
-                if diferenca <= 30:
-                    print(f"ID: {ident} \nProduto: {produto} \nDias: { diferenca} \n")
                 
-                if diferenca <= 0:
-                    print(f"Produto Deletado! \nID: {ident} \nProduto: {produto}")
-                    self.cursor3.execute(deleteQuery, (ident,))
+                # Caso a diferenca(dias para vencimento) seja menor ou igual a 30 dias, havera o print do ID, Produto, Dias, e Data
+                if diferenca <= 30:
 
+                    stringMenor30 = f"ID: {ident} \nProduto: {produto} \nDias: {diferenca} \nData: {validade} \n"
+                    print(stringMenor30)
+                
+                # Caso a diferenca(dias para vencimento) seja igual a 0, a remessa e excluida do banco de dados
+                if diferenca <= 0:
+
+                    stringDelete = f"Produto Deletado! \nID: {ident} \nProduto: {produto} \nValidade: {validade}"
+                    print(stringDelete)
+
+                    self.cursor3.execute(deleteQuery, (ident,))
                 
                 self.cursor2.execute(updateDiasQuery, (diferenca, ident))
                 self.conex.commit()
@@ -120,14 +128,19 @@ class PerdasDB:
 
         self.cursor.execute(query, (produto, setor, ident))
         self.conex.commit()
-        print("Produto editado com sucesso")
+        print("\nProduto editado com sucesso")
 
     #METODO QUE BUSCA A REMESSA DO PRODUTO DE ACORDO COM O NOME DO PRODUTO
+    #Se o nome do Produto for Todos ou *, a funcao seleciona todos os itens do banco de dados
     #Pega todos os valores na tabela, e descompacta em variaveis para uma melhor visualizacao
     def buscarProduto(self, produto):
-        query = 'SELECT * FROM remessas WHERE produto LIKE ?'
+        buscaNomeQuery = 'SELECT * FROM remessas WHERE produto LIKE ?'
+        self.cursor.execute(buscaNomeQuery, (f"%{produto}%",))
 
-        self.cursor.execute(query, (f"%{produto}%",))
+        if produto == "Todos" or produto == "*":
+            selectTodosQuery = "SELECT * FROM remessas"
+            self.cursor.execute(selectTodosQuery,)
+
         produtoTuple = self.cursor.fetchall()
 
         print("\nID - NOME - SETOR - VALIDADE - DIAS \n")
@@ -139,9 +152,11 @@ class PerdasDB:
             print(f"\n{ident} - {nome} - {setor} - {data} - {diasRestantes}\n")
         print("-" *70)
 
+
     def fechar(self):
         self.cursor.close()
         self.conex.close()
+
 
 # FUNCAO QUE PEGA OS DADOS DO PRODUTO E RETORNA PARA VARIAVEIS
 """ Caso o Parametro seja (1), a funcao so retornara o {Produto, Setor}, e caso o Parametro seja (0)
