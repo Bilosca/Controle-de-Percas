@@ -21,7 +21,7 @@ usei do módulo SQLite para o Gerenciamento do Banco de Dados no código, e o "B
 ## Atualizações no código
 
 ### 09/12/20
- -Me foi indicado a separar a classe e instancias das funções principais que rodam o programa, para uma melhor leitura e manutenção.
+- Me foi indicado a separar a classe e instancias das funções principais que rodam o programa, para uma melhor leitura e manutenção.
 - Com o modulo "os", ao iniciar o Código, se caso não tiver a pasta "perdas" será criado, e dentro haverá o arquivo .db, com intuito de melhor organização e melhor prática.
 
 ### 13/12/2020
