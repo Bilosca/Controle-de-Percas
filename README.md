@@ -19,9 +19,11 @@ foi utilizado nesse projeto, a Linguagem de Programação Python, o modelo de Ba
 usei do módulo SQLite para o Gerenciamento do Banco de Dados no código, e o "BD Browser for SQLite" para uma melhor visualização dos dados.
 
 ## Atualizações no código
-### - Separação de Arquivos
-Me foi indicado a separar a classe e instancias das funções principais que rodam o programa, para uma melhor leitura e manutenção.
 
-### - Criação do Diretório e arquivo
-Com o modulo "os", ao iniciar o Código, se caso não tiver a pasta "perdas" será criado, e dentro haverá o arquivo .db, com intuito de melhor organização e melhor pratica
+### 09/12/20
+ -Me foi indicado a separar a classe e instancias das funções principais que rodam o programa, para uma melhor leitura e manutenção.
+- Com o modulo "os", ao iniciar o Código, se caso não tiver a pasta "perdas" será criado, e dentro haverá o arquivo .db, com intuito de melhor organização e melhor prática.
 
+### 13/12/2020
+- foi modificado algumas váriaveis, para uma melhor leitura de código
+- alterada a função "Buscar Remessa" para que mostre todos os itens do banco de dados, caso o argumento da função(Nome do Produto) seja "Todos" ou "*"
