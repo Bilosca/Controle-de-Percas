@@ -20,6 +20,13 @@ class PerdasDB:
         self.cursor.execute(criaTabelaQuery)
         self.conex.commit()
 
+    def detalhes(self, string, var):
+
+        cabecalio = "-" *40
+
+        print(cabecalio + string + cabecalio)
+        print(var)
+
 
     # Metodo para inserir uma remessa no Banco de Dados, recebe:
     # o nome do produto, o setor, dia de validade, mes e ano.
@@ -83,6 +90,9 @@ class PerdasDB:
             self.cursor.execute(selectIdQuery,)
             colunaDias = self.cursor.fetchall()
 
+            print("\nID - NOME - SETOR - VALIDADE - DIAS \n")
+            print("-" *80)
+
             # a cada loop "Ident" recebe o ID da remessa
             for row in colunaDias:
                 #row[0] = id
@@ -94,11 +104,12 @@ class PerdasDB:
                 diferenca = (self.organizaDatas(ident))
                 
                 # Caso a diferenca(dias para vencimento) seja menor ou igual a 30 dias, havera o print do ID, Produto, Dias, e Data
-                if diferenca <= 30:
+                if diferenca <= 30 :
 
-                    stringMenor30 = f"ID: {ident} \nProduto: {produto} \nDias: {diferenca} \nData: {validade} \n"
+                    stringMenor30 = f"\n{ident} - {produto} - {validade} - ({diferenca})\n"
                     print(stringMenor30)
-                
+                    
+
                 # Caso a diferenca(dias para vencimento) seja igual a 0, a remessa e excluida do banco de dados
                 if diferenca <= 0:
 
@@ -107,9 +118,11 @@ class PerdasDB:
 
                     self.cursor3.execute(deleteQuery, (ident,))
                 
+                
                 self.cursor2.execute(updateDiasQuery, (diferenca, ident))
                 self.conex.commit()
 
+            print("-" * 80)
         
         except Exception as erro:
             print(erro)
@@ -137,20 +150,20 @@ class PerdasDB:
         buscaNomeQuery = 'SELECT * FROM remessas WHERE produto LIKE ?'
         self.cursor.execute(buscaNomeQuery, (f"%{produto}%",))
 
-        if produto == "Todos" or produto == "*":
+        if produto == "todos" or produto == "*":
             selectTodosQuery = "SELECT * FROM remessas"
             self.cursor.execute(selectTodosQuery,)
 
         produtoTuple = self.cursor.fetchall()
 
         print("\nID - NOME - SETOR - VALIDADE - DIAS \n")
-        print("-" *70)
+        print("-" *80)
 
         for item in produtoTuple:
             ident, nome, setor, data, diasRestantes, = item
 
             print(f"\n{ident} - {nome} - {setor} - {data} - {diasRestantes}\n")
-        print("-" *70)
+        print("-" *80)
 
 
     def fechar(self):
