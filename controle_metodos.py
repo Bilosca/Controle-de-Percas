@@ -21,14 +21,6 @@ class PerdasDB:
         self.cursor.execute(criaTabelaQuery)
         self.conex.commit()
 
-    def detalhes(self, string, var):
-
-        cabecalio = "-" *40
-
-        print(cabecalio + string + cabecalio)
-        print(var)
-
-
     # Metodo para inserir uma remessa no Banco de Dados, recebe:
     # o nome do produto, o setor, dia de validade, mes e ano.
     def insereRemessa(self, produto, setor, dia, mes, ano):
