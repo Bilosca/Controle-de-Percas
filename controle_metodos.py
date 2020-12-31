@@ -1,5 +1,6 @@
 import sqlite3
 import datetime
+import pandas as pd
 
 #Arquivo que contem os metodos e classes
 
@@ -77,8 +78,16 @@ class PerdasDB:
             return diferenca
         except TypeError:
             pass
-        
+     
+    def criaDataFrame(self, lista):
 
+        df = pd.DataFrame.from_records(lista)
+
+        return df
+
+     
+    #Funcao com mais Relevancia no projeto, aonde ela atualiza a a coluna dias e informa o usuario, os produtos
+    #cujo estao perto de vencimento
     def atualizaDias_e_Notifica(self):
 
         #queries utilizadas nesta funcao
@@ -90,25 +99,33 @@ class PerdasDB:
             self.cursor.execute(selectIdQuery,)
             colunaDias = self.cursor.fetchall()
 
-            print("\nID - NOME - SETOR - VALIDADE - DIAS \n")
+            lista = []
+
+            print("\nID - NOME - VALIDADE - DIAS \n")
             print("-" *80)
 
             # a cada loop "Ident" recebe o ID da remessa
             for row in colunaDias:
                 #row[0] = id
-                #row[1] = nome do produto 
+                #row[1] = nome do produto
+                #row[2] = validade do produto
                 ident = row[0]
                 produto = row[1]
                 validade = row[2]
+                diferenca = int(self.organizaDatas(ident))
 
-                diferenca = (self.organizaDatas(ident))
                 
+                
+
                 # Caso a diferenca(dias para vencimento) seja menor ou igual a 30 dias, havera o print do ID, Produto, Dias, e Data
                 if diferenca <= 30 :
+                    lista.append({
+                        "ID" : ident,
+                        "Nome" : produto,
+                        "Validade" : validade,
+                        "Dias" : diferenca
+                    })
 
-                    stringMenor30 = f"\n{ident} - {produto} - {validade} - ({diferenca})\n"
-                    print(stringMenor30)
-                    
 
                 # Caso a diferenca(dias para vencimento) seja igual a 0, a remessa e excluida do banco de dados
                 if diferenca <= 0:
@@ -122,6 +139,8 @@ class PerdasDB:
                 self.cursor2.execute(updateDiasQuery, (diferenca, ident))
                 self.conex.commit()
 
+            df = self.criaDataFrame(lista)
+            print(f"{df}")
             print("-" * 80)
         
         except Exception as erro:
