@@ -26,7 +26,11 @@ usei do módulo SQLite para o Gerenciamento do Banco de Dados no código, e o "B
 
 ### 13/12/2020
 - foi modificado algumas váriaveis, para uma melhor leitura de código
-- alterada a função "Buscar Remessa" para que mostre todos os itens do banco de dados, caso o argumento da função(Nome do Produto) seja "Todos" ou "*"
+- alterada a função "Buscar Remessa" para que mostre todos os itens do banco de dados, caso o argumento da função(Nome do Produto) seja "Todos" ou "*".
 
 ### 16/12/2020
-- Alterado a forma de que os Outputs são mostrados ao entrar no programa
+- Alterado a forma de que os Outputs são mostrados ao entrar no programa.
+
+### 30/12/2020
+- Foi me indicado o uso de Pandas para melhor apresentação dos dados, e assim o fiz; Mudando apenas o output inicial, logo será melhor trabalhado e implementado em todo o código
+- Excluido a Função "Detalhes" pois não estava sendo utilizada e bem aproveitada.
