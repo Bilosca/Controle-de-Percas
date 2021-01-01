@@ -70,10 +70,32 @@ class PerdasDB:
             return diferenca
         except TypeError:
             pass
+
+    def criaLista(self, lista,ident, produto, validade, dias, setor = None):
+        if setor is None:
+            lista.append({
+                "ID" : ident,
+                "Nome" : produto,
+                "Validade" : validade,
+                "Dias" : dias
+            })
+            return lista
+        
+        else:
+            lista.append({
+                "ID" : ident,
+                "Nome" : produto,
+                "Setor" : setor,
+                "Validade" : validade,
+                "Dias" : dias
+            })
+            return lista
+
      
     def criaDataFrame(self, lista):
 
         df = pd.DataFrame.from_records(lista)
+        df = df.to_string(index=False)
 
         return df
 
@@ -91,10 +113,10 @@ class PerdasDB:
             self.cursor.execute(selectIdQuery,)
             colunaDias = self.cursor.fetchall()
 
-            lista = []
-
-            print("\nID - NOME - VALIDADE - DIAS \n")
+            print()
             print("-" *80)
+
+            listaDados = []
 
             # a cada loop "Ident" recebe o ID da remessa
             for row in colunaDias:
@@ -106,23 +128,15 @@ class PerdasDB:
                 validade = row[2]
                 diferenca = int(self.organizaDatas(ident))
 
-                
-                
 
                 # Caso a diferenca(dias para vencimento) seja menor ou igual a 30 dias, havera o print do ID, Produto, Dias, e Data
                 if diferenca <= 30 :
-                    lista.append({
-                        "ID" : ident,
-                        "Nome" : produto,
-                        "Validade" : validade,
-                        "Dias" : diferenca
-                    })
-
+                    self.criaLista(listaDados, ident, produto, validade, diferenca)
 
                 # Caso a diferenca(dias para vencimento) seja igual a 0, a remessa e excluida do banco de dados
                 if diferenca <= 0:
 
-                    stringDelete = f"Produto Deletado! \nID: {ident} \nProduto: {produto} \nValidade: {validade}"
+                    stringDelete = f"Produto Deletado! \nID: {ident} \nProduto: {produto} \nValidade: {validade}\n"
                     print(stringDelete)
 
                     self.cursor3.execute(deleteQuery, (ident,))
@@ -131,7 +145,7 @@ class PerdasDB:
                 self.cursor2.execute(updateDiasQuery, (diferenca, ident))
                 self.conex.commit()
 
-            df = self.criaDataFrame(lista)
+            df = self.criaDataFrame(listaDados)
             print(f"{df}")
             print("-" * 80)
         
@@ -161,19 +175,21 @@ class PerdasDB:
         buscaNomeQuery = 'SELECT * FROM remessas WHERE produto LIKE ?'
         self.cursor.execute(buscaNomeQuery, (f"%{produto}%",))
 
+        listaDados = []
+
         if produto == "todos" or produto == "*":
             selectTodosQuery = "SELECT * FROM remessas"
             self.cursor.execute(selectTodosQuery,)
 
         produtoTuple = self.cursor.fetchall()
-
-        print("\nID - NOME - SETOR - VALIDADE - DIAS \n")
         print("-" *80)
 
         for item in produtoTuple:
             ident, nome, setor, data, diasRestantes, = item
+            self.criaLista(listaDados, ident, nome, data, diasRestantes, setor)
 
-            print(f"\n{ident} - {nome} - {setor} - {data} - {diasRestantes}\n")
+        df = self.criaDataFrame(listaDados)
+        print(df)
         print("-" *80)
 
 

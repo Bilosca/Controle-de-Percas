@@ -10,7 +10,7 @@ perdas = PerdasDB("perdas/controle_perdas.db")
 letras = ['i', 'e', 'b', 'd', 'f']
 perdas.atualizaDias_e_Notifica()
 while True:
-    print("\nPressione a Letra pra escolher sua opcao: ")
+    print("\n\nPressione a Letra pra escolher sua opcao: ")
     print()
 
     try:
