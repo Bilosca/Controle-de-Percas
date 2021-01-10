@@ -144,9 +144,11 @@ class PerdasDB:
                 
                 self.cursor2.execute(updateDiasQuery, (diferenca, ident))
                 self.conex.commit()
+            
 
             df = self.criaDataFrame(listaDados)
             print(f"{df}")
+            
             print("-" * 80)
         
         except Exception as erro:
@@ -154,9 +156,15 @@ class PerdasDB:
 
     # Metodo para Excluir uma remessa do Banco de Dados, recebe como parametro o ID da remessa
     def excluiRemessa(self, ident):
-        query = 'DELETE FROM remessas WHERE id = ?'
+        deleteQueryByID = 'DELETE FROM remessas WHERE id = ?'
 
-        self.cursor.execute(query,(ident,))
+        listaProduto = ident.split(',')
+
+        if len(listaProduto) > 1:
+            for item in listaProduto:
+                self.cursor.execute(deleteQueryByID,(item,))
+                
+        self.cursor.execute(deleteQueryByID,(ident,))
         self.conex.commit()
         print("\nProduto deletado com sucesso")
 
