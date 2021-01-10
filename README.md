@@ -16,7 +16,8 @@ para atualizar a Tabela com os dias restantes para o vencimento do produto.
 
 ## Tecnlogias Utilizadas
 foi utilizado nesse projeto, a Linguagem de Programação Python, o modelo de Banco de Dados Relacional SQL,
-usei do módulo SQLite para o Gerenciamento do Banco de Dados no código, e o "BD Browser for SQLite" para uma melhor visualização dos dados.
+usei do módulo SQLite para o Gerenciamento do Banco de Dados no código, e o "BD Browser for SQLite" para uma melhor visualização com uma Interface Gráfica.
+Foi utilizado também a Bibloteca Pandas para gerar o output e visualização dos dados.
 
 ## Atualizações no código
 
@@ -34,3 +35,7 @@ usei do módulo SQLite para o Gerenciamento do Banco de Dados no código, e o "B
 ### 30/12/2020
 - Foi me indicado o uso de Pandas para melhor apresentação dos dados, e assim o fiz; Mudando apenas o output inicial, logo será melhor trabalhado e implementado em todo o código
 - Excluido a Função "Detalhes" pois não estava sendo utilizada e bem aproveitada.
+
+### 01/01/2021
+- Modificado o output da função de Busca, implementando um DataFrame com Pandas contendo os Dados dos produtos
+- Retirado o Index do DataFrame para uma visualização mais limpa e simples do do output 
