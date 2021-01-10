@@ -38,4 +38,7 @@ Foi utilizado também a Bibloteca Pandas para gerar o output e visualização do
 
 ### 01/01/2021
 - Modificado o output da função de Busca, implementando um DataFrame com Pandas contendo os Dados dos produtos
-- Retirado o Index do DataFrame para uma visualização mais limpa e simples do do output 
+- Retirado o Index do DataFrame para uma visualização mais limpa e simples do do output
+
+### 09/01/2021
+- Implementado a funcionabilidade de excluir mais de um item do Banco de Dados de uma so vez, aonde basta separar os ID's por (",")
