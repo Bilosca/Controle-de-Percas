@@ -38,8 +38,6 @@ while True:
 
         elif decision == 'd':
             ident = input("\nId da Remessa: ")
-
-
             perdas.excluiRemessa(ident)
                     
         elif decision == 'f':

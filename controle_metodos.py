@@ -71,7 +71,10 @@ class PerdasDB:
         except TypeError:
             pass
 
-    def criaLista(self, lista,ident, produto, validade, dias, setor = None):
+    # Metodo para a criacao do dicionario e adicionar diretamente a Lista passada como parametro
+    def criaDict(self, lista,ident, produto, validade, dias, setor = None):
+
+        #caso o nome do setor seja None ele nao ira inserir o setor ao dicionario
         if setor is None:
             lista.append({
                 "ID" : ident,
@@ -81,6 +84,7 @@ class PerdasDB:
             })
             return lista
         
+        #caso o contrario, ele ira adicionar
         else:
             lista.append({
                 "ID" : ident,
@@ -91,7 +95,7 @@ class PerdasDB:
             })
             return lista
 
-     
+    # Metodo com o objetivo de Criar o dataframe com Pandas e retornar o Dataframe
     def criaDataFrame(self, lista):
 
         df = pd.DataFrame.from_records(lista)
@@ -129,9 +133,10 @@ class PerdasDB:
                 diferenca = int(self.organizaDatas(ident))
 
 
-                # Caso a diferenca(dias para vencimento) seja menor ou igual a 30 dias, havera o print do ID, Produto, Dias, e Data
+                # Caso a diferenca(dias para vencimento) seja menor ou igual a 30 dias, o item sera adicionado a uma lista em formato
+                # de dicionario
                 if diferenca <= 30 :
-                    self.criaLista(listaDados, ident, produto, validade, diferenca)
+                    self.criaDict(listaDados, ident, produto, validade, diferenca)
 
                 # Caso a diferenca(dias para vencimento) seja igual a 0, a remessa e excluida do banco de dados
                 if diferenca <= 0:
@@ -145,7 +150,7 @@ class PerdasDB:
                 self.cursor2.execute(updateDiasQuery, (diferenca, ident))
                 self.conex.commit()
             
-
+            # Os adicionados na lista, serao transformados em uma tabela para melhor visualizacao
             df = self.criaDataFrame(listaDados)
             print(f"{df}")
             
@@ -154,7 +159,8 @@ class PerdasDB:
         except Exception as erro:
             print(erro)
 
-    # Metodo para Excluir uma remessa do Banco de Dados, recebe como parametro o ID da remessa
+    # Metodo para Excluir uma remessa do Banco de Dados, recebe como parametro o ID da remessa, caso seja passado mais de um
+    # separado por "," serao excluidos
     def excluiRemessa(self, ident):
         deleteQueryByID = 'DELETE FROM remessas WHERE id = ?'
 
@@ -194,7 +200,7 @@ class PerdasDB:
 
         for item in produtoTuple:
             ident, nome, setor, data, diasRestantes, = item
-            self.criaLista(listaDados, ident, nome, data, diasRestantes, setor)
+            self.criaDict(listaDados, ident, nome, data, diasRestantes, setor)
 
         df = self.criaDataFrame(listaDados)
         print(df)
