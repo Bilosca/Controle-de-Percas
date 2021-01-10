@@ -41,4 +41,5 @@ Foi utilizado também a Bibloteca Pandas para gerar o output e visualização do
 - Retirado o Index do DataFrame para uma visualização mais limpa e simples do do output
 
 ### 09/01/2021
-- Implementado a funcionabilidade de excluir mais de um item do Banco de Dados de uma so vez, aonde basta separar os ID's por (",")
+- Implementado a funcionabilidade de excluir mais de um item do Banco de Dados de uma só vez, aonde basta separar os ID's por (",")
+- Atualização das descrições e documentações do código e funções
