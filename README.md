@@ -4,7 +4,7 @@ Como eu trabalho com reposição de mercadorias, ocorre de haver percas, então 
 habilidades como programador, praticar, e aprender tecnologias que antes não tinha trabalhado.
 
 ## Como Funciona o projeto
-É um projeto bastante simples. Quando iniciado primeiramente criará a pasta "Perda" e dentro dela o arquivo "controle_perdas.db".
+É um projeto bastante simples em Command Line. Quando iniciado primeiramente criará a pasta "Perda" e dentro dela o arquivo "controle_perdas.db".
 Para o manuseamento do Programa, ele lhe dará as seguintes opções:
 * Inserir Remessa
 * Editar Remessa
